@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>中文词语接龙</title>
+<style>
+  :root {
+    --brand: #6366f1;
+    --brand2: #8b5cf6;
+  }
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: linear-gradient(135deg, #a8c0ff 0%, #c2a8ff 50%, #ffc3a0 100%);
+    background-attachment: fixed;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 560px;
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 28px;
+    padding: 32px 28px 26px;
+    box-shadow: 0 24px 60px rgba(60, 50, 120, 0.22);
+  }
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: #312e81;
+  }
+
+  .sub {
+    margin: 0 0 22px;
+    font-size: 14px;
+    color: #6b7280;
+  }
+
+  .row { display: flex; gap: 10px; }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    font-size: 18px;
+    font-family: inherit;
+    color: #1f2937;
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 16px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  input:focus {
+    border-color: var(--brand);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
+  }
+  input.shake { animation: shake .35s; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+  }
+
+  button {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    padding: 14px 24px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
+    transition: transform .15s, box-shadow .15s;
+    white-space: nowrap;
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(99,102,241,.42); }
+  button:active { transform: translateY(0); }
+
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .actions button { padding: 11px 18px; font-size: 15px; }
+  .actions .secondary {
+    background: #fff;
+    color: #4f46e5;
+    box-shadow: inset 0 0 0 2px #ddd6fe;
+  }
+  .actions .secondary:hover { box-shadow: inset 0 0 0 2px #a5b4fc; }
+  .actions .ghost {
+    background: transparent;
+    color: #6b7280;
+    box-shadow: none;
+  }
+  .actions .ghost:hover { color: #374151; transform: none; }
+
+  .chain {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .chain:empty { display: none; }
+
+  .node {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .who {
+    flex: none;
+    width: 34px;
+    text-align: right;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  .pill {
+    padding: 10px 20px;
+    border-radius: 999px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  .node.user .pill {
+    background: #eef2ff;
+    color: #4338ca;
+    box-shadow: inset 0 0 0 2px #c7d2fe;
+  }
+  .node.ai .pill {
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(99, 102, 241, 0.35);
+  }
+
+  .arrow {
+    margin-left: 44px;
+    font-size: 16px;
+    line-height: 1;
+    color: #c4b5fd;
+  }
+
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(10px) scale(.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .node.pop { animation: pop .34s cubic-bezier(.2, .9, .3, 1.4) both; }
+
+  .hint {
+    margin-top: 14px;
+    min-height: 20px;
+    font-size: 14px;
+    color: #6b7280;
+  }
+  .hint.warn { color: #d97706; }
+  .hint.ok { color: #059669; }
+
+  .hidden { display: none !important; }
+
+  .footer {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 12px;
+    color: #9ca3af;
+    text-align: center;
+  }
+
+  @media (max-width: 420px) {
+    .card { padding: 24px 18px; }
+    h1 { font-size: 22px; }
+    .pill { font-size: 17px; padding: 9px 16px; }
+    button { padding: 13px 16px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h1>中文词语接龙</h1>
+  <p class="sub">输入一个中文词语，我来接下一步 👇</p>
+
+  <div class="row">
+    <input id="wordInput" type="text" placeholder="例如：天气" maxlength="12" autocomplete="off" />
+    <button id="goBtn">接龙</button>
+  </div>
+
+  <div class="chain" id="chain"></div>
+  <div class="hint" id="hint"></div>
+
+  <div class="actions">
+    <button class="secondary hidden" id="nextBtn">继续接一步</button>
+    <button class="ghost hidden" id="resetBtn">重新开始</button>
+  </div>
+
+  <div class="footer">词库收录 900+ 常用中文词语 · 规则：上一词的最后一个字 = 下一词的第一个字</div>
+</div>
+
+<script>
+/* ---------------- 词库 ---------------- */
+const RAW = `
+一起 一样 一定 一切 一直 一般 一边 一共 一会 一点 一生 一向 一流 一同 一口气
+不要 不能 不是 不过 不同 不少 不用 不断 不管 不久 不但 不行 不敢 不仅 不安
+大家 大学 大概 大会 大小 大约 大声 大方 大门 大海 大雨 大风 大自然
+小心 小学 小时 小声 小组 小孩 小麦 小说 小气 小路 小雨 小偷
+中国 中间 中午 中心 中学 中文 中央 中断 中年 中药 中秋
+人民 人家 人们 人类 人生 人口 人工 人才 人间 人心 人物
+天气 天下 天空 天上 天文 天使 天然 天天 天才 天线 天堂
+地方 地球 地图 地铁 地位 地址 地面 地下 地理 地毯
+日子 日常 日期 日夜 日记 日出 日落 日报 日语 日光
+月亮 月光 月色 月份 月饼 月球 月牙 月台
+水果 水平 水手 水泥 水电 水池 水牛 水龙头 水土
+火车 火锅 火灾 火山 火柴 火焰 火苗 火星 火气
+山水 山顶 山区 山羊 山脚 山峰 山路 山谷
+风景 风格 风雨 风筝 风趣 风车 风沙 风度 风扇 风衣
+云彩 云雾 云朵 云南 云海
+雨伞 雨水 雨天 雨季 雨衣 雨点
+花园 花朵 花草 花瓶 花茶 花色 花生 花费 花心
+草地 草原 草帽 草莓 草稿 草案
+树木 树叶 树枝 树林 树干 树立 树苗
+林子 林业 林间 林中
+海洋 海边 海面 海拔 海鲜 海报 海豚 海带 海风
+河流 河水 河岸 河马 河床
+湖水 湖泊 湖面
+光明 光线 光荣 光滑 光头 光彩 光临
+明天 明白 明亮 明显 明星 明智 明月 明年
+白天 白色 白云 白菜 白酒 白开水 白发 白纸
+黑色 黑板 黑夜 黑马 黑洞 黑心 黑猫
+红色 红茶 红旗 红烧 红火 红包 红叶
+黄色 黄金 黄瓜 黄牛 黄河 黄土
+绿色 绿豆 绿茶 绿灯 绿叶
+蓝色 蓝天 篮球 蓝图 蓝莓
+紫色 紫菜 紫罗兰 紫藤
+青年 青色 青春 青蛙 青菜 青草
+色彩 色调 色子
+彩色 彩虹 彩票 彩排 彩笔
+电话 电脑 电视 电影 电梯 电池 电动 电车 电线 电灯
+话题 话筒 话音 话费 话语
+脑子 脑袋 脑筋
+影子 影响 影片 影院 影像
+视力 视线 视觉 视频
+机会 机器 机场 机关 机器人 机票 机能
+场所 场面 场合 场地 场景
+会议 会长 会员 会见 会场
+议论 议会 议题
+长城 长江 长处 长大 长辈 长度 长期 长途
+城市 城墙 城门 城镇 城堡
+市场 市民 市长 市区 市面
+民族 民间 民主 民众 民歌
+族人 族长 族谱
+间隔 间隙 间接 间断
+隔壁 隔开 隔热
+壁纸 壁画 壁虎
+纸张 纸巾 纸片 纸箱
+片刻 片段 片面
+刻度 刻意 刻板
+意思 意义 意见 意外 意识 意志 意愿
+思考 思念 思路 思维 思想
+路上 路口 路线 路灯 路过 路费
+口气 口袋 口号 口语 口腔 口味 口水
+号码 号召 号角
+码头 码字
+头发 头脑 头疼 头条 头目 头领
+发现 发展 发明 发生 发电 发挥 发型 发言 发音
+现在 现场 现象 现实 现金 现任
+在意 在家 在职 在行
+家庭 家乡 家人 家具 家长 家务
+乡村 乡下 乡亲 乡间
+下雨 下去 下面 下午 下次 下载 下手 下巴 下水
+去年 去世 去向 去掉 去留
+面条 面包 面对 面积 面孔 面子 面料
+包子 包菜 包括 包装 包袱 包围
+括号 括弧
+弧线 弧度
+线索 线路 线条 线人
+索道 索取 索引
+引用 引导 引进 引擎 引力
+柱子 柱石
+石头 石油 石灰 石榴 石板
+油田 油画 油条 油菜 油灯
+画家 画面 画廊 画笔 画报
+廊子 走廊
+笔记 笔友 铅笔 笔直
+记忆 记者 记录 记得 记事
+录像 录音 录用 录取
+用心 用力 用户 用途 用法 用药
+方法 法律 法国 法官 法规 法则
+律师 律动 律法
+规定 规则 规模 规律 规矩
+矩形 规矩
+定义 定期 定价 定理 定居
+义务 义气 义演
+务实 务农 务必 务求
+气球 气候 气体 气味 气温 气人 气功
+球鞋 球场 球拍 球迷 球赛
+鞋子 鞋带 鞋垫
+带来 带头 带领 带队 带子 带路
+来回 来往 来年 来信 来源 来客
+源头 源泉 源流
+泉水 泉眼
+眼睛 眼光 眼神 眼镜 眼泪 眼球
+神秘 神话 神情 神经 神奇 神仙
+秘密 秘书 密封 秘方
+书本 书架 书店 书包 书法 书桌
+本来 本人 本身 本领 本地 本子
+身体 身边 身高 身份 身心 身影
+边界 边缘 边上 边门 边角
+世界 界限 界面 界定
+缘分 缘由
+由于 理由 由来 由衷
+理解 理论 理想 理由 理发 理智
+解决 解释 解放 解开 解答
+放心 放松 放弃 放假 放学 放下
+心里 心情 心灵 心脏 心得 心事 心思
+情况 情感 情绪 情节 情人 情愿
+绪论
+节日 节目 节约 节奏 节气
+目前 目的 目光 目标 目录 目睹
+前面 前进 前途 前提 前方
+进步 进入 进行 进攻 进展
+行动 行业 行李 行走 行为 行人
+为了 为难 为人 为期
+了解 了不起
+难题 难过 难忘 难看 难点
+过去 过来 过年 过分 过程 过敏
+程度 程序 课程 行程
+序列 序幕 序言
+列车 列举 列队 列强
+车站 车票 车轮 车厢 车门 车子
+站立 站台 站长 站点
+台风 台灯 台阶 台湾 台词
+灯泡 灯光 灯笼 灯塔 灯芯
+塔楼 塔尖
+尖子 尖端 尖叫 尖锐
+锐利 尖锐
+利益 利用 利息 利润 利落 利索
+益虫 益处 益友
+处理 处处 处方 处境 处世
+置身 置办 位置 置换
+位置 位于 位移 位子
+移动 移民 移植 移交
+动物 动手 动作 动态 动员 动力 动人
+物品 物质 物理 物体 物价 物产
+品质 品牌 品尝 品种 品行
+种子 种类 种植 种族 种地
+类型 类似 类别 类推
+别人 别的 别处 告别 别墅
+告诉 告别 告示 公告 告状
+诉说 诉讼 诉苦
+说话 说明 说法 说服 说谎
+服务 服装 服从 服气 服饰
+装饰 装修 装备 组装 装扮
+饰品 饰物
+修理 修改 修建 修养 修剪
+养成 养育 养老 养鱼 养料
+老师 老板 老人 老年 老鼠 老家 老实
+师父 师生 师傅 师资
+板子 板凳 板块 板书
+凳子
+子女 子孙 子弹 子弟 子夜
+女儿 女人 女士 女孩 女性
+孩子 孩童
+童年 童话 童装 童心 童趣
+年纪 年轻 年代 年度 年糕
+轻松 轻易 轻视 轻快 轻声
+松树 松鼠 松手 松软
+鼠标 鼠年
+标准 标签 标题 标志 标语
+准确 准时 准备 准许
+备份 备注 备课
+注意 注册 注定 注射 注视
+射击 射线 射门
+门口 门票 门诊 门牙 门窗
+牙齿 牙膏 牙刷 牙医
+医生 医院 医学 医药 医术
+生活 生命 生日 生意 生气 生病 生词 生菜
+活动 活泼 活力 活页
+力量 力气 力求
+命运 命令 命名 生命 算命
+令人 命令 令牌
+牌子 牌照 扑克牌
+照片 照顾 照相 照明 照样
+顾客 顾问 顾及
+问题 问候 问答 问世
+题目 题材 题词
+材料 材质 木材
+料理 料子 料想
+夜晚 夜里 夜市 夜空 夜宵
+晚上 晚饭 晚安 晚会 晚年
+安全 安静 安排 安心 安装 安慰
+排队 排列 排球 排除 排长
+除了 除法 除外 除夕
+外面 外交 外国 外语 外套 外公
+套装 套房 套路 手套
+交通 交流 交换 交友 交给 交界
+换人 换车 换钱 换取
+通信 通知 通过 通行 通俗
+知识 知道 知名 知心 知了
+识别 识字 识趣
+道路 道理 道歉 道德 道具 道士
+具体 具有 工具 具备
+德国 德育 德行 德语
+教育 体育 育才 育苗
+才能 才华 刚才 才子
+华人 华丽 华侨 中华 华语
+侨胞 侨民
+胞弟 细胞 同胞
+丽人 美丽
+美丽 美食 美好 美国 美术 美景
+术语 手术 艺术 术士
+食物 食堂 食品 食谱 食用
+堂哥 课堂 堂弟
+谱曲 谱子 谱写
+曲子 曲线 歌曲 曲折
+歌手 歌声 歌唱 歌词 歌曲
+手机 手表 手工 手掌 手术 手指 手续
+表示 表演 表达 表面 表格 表明
+演员 演讲 演出 演习 演奏
+出去 出口 出发 出现 出版 出生 出色
+版本 版权 版面
+权力 权利 权威 权益
+威风 威力 威信
+信心 信息 信封 信用 相信 信件
+封面 封闭 封建
+建设 建议 建筑 建立 建造
+设计 设备 设法 设立 设想
+计划 计算 计较 计时
+划分 划船
+算了 算术 算计 算命
+筑路
+立刻 立场 立体 立方 立志
+方向 方法 方便 方面 方案 方式 方圆
+向前 向往 向上 向日葵
+往来 往年 往往 往事
+上面 上学 上班 上网 上午 上升 上课
+升级 升学 升职 升旗
+班级 班长 班会 班车
+级别 年级 级长
+网络 网球 网址 网子
+地址
+络绎
+我们 我的
+你们 你好
+他们 他人
+她们
+这里 这个 这些 这样
+那里 那个 那些 那样
+什么 怎么 怎样
+可以 可能 可是 可爱 可笑
+是的 是非
+有时 有的 有用 有趣 有名
+没有 没事 没关系
+就是 就要
+都是
+也是
+还有 还是
+很好 很多
+最好 最后 最初
+更加 更好
+已经
+正在 正好 正确 正常
+刚才 刚刚
+再见 再次
+只有 只是
+把握 把手
+被子
+让步
+给予
+对于 对方 对话 对象 对比
+从来 从前 从此
+到了 到处 到底
+想念 想法 想象
+看见 看法 看书 看到
+听见 听说 听力
+吃饭 吃力 吃亏
+喝水 喝茶
+走路 走廊 走过
+跑步 跑车
+飞机 飞行 飞翔
+跳舞 跳高
+唱歌 唱片
+笑话 笑容 笑声
+哭泣
+睡觉 睡眠
+醒来
+买卖 买单
+卖点
+做事 做法 做梦
+工作 工人 工厂 工业
+作业 作家 作品 作用 作为
+业务 业余 业绩
+爱情 爱好 爱心
+喜欢 喜悦
+欢迎 欢乐 欢喜
+快乐 乐观 乐器
+快乐 快速 快要
+慢慢 慢性
+高兴 高度 高楼 高速
+兴趣 兴奋
+低头 低温
+新鲜 新闻 新年
+旧书 旧事
+短信 短期
+多少 多么 多数
+少年 少数
+好的 好像 好奇 好处
+坏人 坏处
+真的 真相 认真
+假期 假如
+冷静 冷气 冷水
+热闹 热情 热水 热爱
+暖和
+凉快 凉水
+干净 干活 干脆
+净化
+清楚 清水 清洁 清晨
+早上 早就 早餐 早晨
+春天 春节 春风 春雨
+夏天 夏季
+秋天 秋风 秋雨
+冬天 冬季 冬眠
+东西 东方 东北 东南
+南方 南瓜 南京
+西瓜 西方 西北 西装
+北方 北京 北风
+京剧 京城
+剧本 剧场 剧烈
+游戏 游泳 游客 旅游
+戏剧 戏院
+泳池 泳衣
+客人 客厅 客气
+厅堂
+主人 主要 主张
+要求 要是 要点
+求学 求助
+助手 助人
+帮忙 帮助
+忙碌 忙于
+闲话 休闲
+空气 空间 空手
+满意 满足
+足球 足够
+够了
+缺点 缺少
+加油 加入 加快
+减少 减肥
+乘法 乘车
+数学 数量 数字
+字典 字母 字画
+典礼 典型
+母亲 母语 字母
+亲人 亲自 亲戚
+朋友 友好 友谊
+友谊
+感觉 感情 感谢 感动
+觉得 睡觉
+谢谢 感谢
+恩人 恩情
+仇恨
+害怕 害羞
+着急 急事 急忙
+等待 等到 等于
+待遇 待会
+遇到 遇见 待遇
+见面 看见 见识
+认识 认真 认为
+实在 实际 实验 实力
+国际 实际
+国家 国际 国王
+王子 国王 王后
+后面 后来 后天 后悔
+后悔
+先生 先后 先进
+`;
+
+/* ---------------- 构建索引 ---------------- */
+const index = new Map();
+for (const w of RAW.trim().split(/\s+/)) {
+  if (!w) continue;
+  const first = Array.from(w)[0];
+  if (!index.has(first)) index.set(first, []);
+  const arr = index.get(first);
+  if (!arr.includes(w)) arr.push(w);
+}
+
+/* ---------------- DOM ---------------- */
+const inputEl = document.getElementById('wordInput');
+const goBtn = document.getElementById('goBtn');
+const chainEl = document.getElementById('chain');
+const hintEl = document.getElementById('hint');
+const nextBtn = document.getElementById('nextBtn');
+const resetBtn = document.getElementById('resetBtn');
+
+let nodes = [];        // [{word, who}]
+let used = new Set();  // 已出现过的词，避免重复
+
+/* ---------------- 工具函数 ---------------- */
+const charsOf = (s) => Array.from(s);
+const lastChar = (s) => { const c = charsOf(s); return c[c.length - 1]; };
+const firstChar = (s) => charsOf(s)[0];
+
+function normalize(s) {
+  // 去掉空白与常见标点
+  return (s || '').replace(/[\s，。、,.!！?？:：;；"'“”‘’()（）《》\-—]/g, '');
+}
+
+function hint(text, type) {
+  hintEl.textContent = text || '';
+  hintEl.className = 'hint' + (type ? ' ' + type : '');
+}
+
+/** 根据上一个词，挑一个能接得上的词 */
+function pickNext(prevWord) {
+  const key = lastChar(prevWord);
+  const pool = (index.get(key) || []).filter(w => !used.has(w) && w !== prevWord);
+  if (!pool.length) return null;
+
+  // 优先挑选“自己还能继续接下去”的词，让接龙更有后劲
+  const extendable = pool.filter(w => {
+    const c = lastChar(w);
+    return (index.get(c) || []).some(x => x !== w);
+  });
+
+  const list = extendable.length ? extendable : pool;
+  return list[Math.floor(Math.random() * list.length)];
+}
+
+/* ---------------- 渲染 ---------------- */
+function renderChain(animateLast = true) {
+  chainEl.innerHTML = '';
+
+  nodes.forEach((n, i) => {
+    if (i > 0) {
+      const arrow = document.createElement('div');
+      arrow.className = 'arrow';
+      arrow.textContent = '↓';
+      chainEl.appendChild(arrow);
+    }
+
+    const node = document.createElement('div');
+    node.className = 'node ' + n.who;
+    if (animateLast && i === nodes.length - 1) node.classList.add('pop');
+
+    const who = document.createElement('span');
+    who.className = 'who';
+    who.textContent = n.who === 'user' ? '你' : '电脑';
+
+    const pill = document.createElement('span');
+    pill.className = 'pill';
+    pill.textContent = n.word;
+
+    node.append(who, pill);
+    chainEl.appendChild(node);
+  });
+
+  chainEl.scrollTop = chainEl.scrollHeight;
+
+  const hasChain = nodes.length > 0;
+  nextBtn.classList.toggle('hidden', !hasChain);
+  resetBtn.classList.toggle('hidden', !hasChain);
+}
+
+/* ---------------- 主流程 ---------------- */
+function startChain() {
+  const raw = normalize(inputEl.value);
+
+  if (!raw) {
+    inputEl.classList.add('shake');
+    setTimeout(() => inputEl.classList.remove('shake'), 400);
+    hint('请先输入一个中文词语吧～', 'warn');
+    inputEl.focus();
+    return;
+  }
+
+  if (charsOf(raw).length < 2) {
+    inputEl.classList.add('shake');
+    setTimeout(() => inputEl.classList.remove('shake'), 400);
+    hint('请输入至少两个字的词语，比如「天气」～', 'warn');
+    inputEl.focus();
+    return;
+  }
+
+  nodes = [{ word: raw, who: 'user' }];
+  used = new Set([raw]);
+
+  const next = pickNext(raw);
+
+  if (!next) {
+    renderChain();
+    hint(`词库里暂时找不到以「${lastChar(raw)}」开头的词语，换个词试试吧～`, 'warn');
+    return;
+  }
+
+  nodes.push({ word: next, who: 'ai' });
+  used.add(next);
+  renderChain();
+  hint(`接上啦！「${raw}」→「${next}」，可以点「继续接一步」接着玩。`, 'ok');
+}
+
+function stepFurther() {
+  if (!nodes.length) return;
+
+  const last = nodes[nodes.length - 1].word;
+  const next = pickNext(last);
+
+  if (!next) {
+    hint(`接不下去啦，词库里没有以「${lastChar(last)}」开头的词了 😅`, 'warn');
+    return;
+  }
+
+  nodes.push({ word: next, who: 'ai' });
+  used.add(next);
+  renderChain();
+  hint(`「${last}」→「${next}」`, 'ok');
+}
+
+function reset() {
+  nodes = [];
+  used = new Set();
+  chainEl.innerHTML = '';
+  nextBtn.classList.add('hidden');
+  resetBtn.classList.add('hidden');
+  hint('');
+  inputEl.value = '';
+  inputEl.focus();
+}
+
+/* ---------------- 事件绑定 ---------------- */
+goBtn.addEventListener('click', startChain);
+nextBtn.addEventListener('click', stepFurther);
+resetBtn.addEventListener('click', reset);
+
+inputEl.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') startChain();
+});
+
+inputEl.addEventListener('input', () => {
+  if (hintEl.classList.contains('warn')) hint('');
+});
+
+window.addEventListener('load', () => inputEl.focus());
+</script>
+</body>
+</html>
