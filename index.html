@@ -3,11 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>中文词语接龙</title>
+<title>中文词语接龙 - 限时挑战版</title>
 <style>
   :root {
     --brand: #6366f1;
     --brand2: #8b5cf6;
+    --danger: #ef4444;
   }
   * { box-sizing: border-box; }
 
@@ -21,9 +22,11 @@
     font-family: system-ui, -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
     background: linear-gradient(135deg, #a8c0ff 0%, #c2a8ff 50%, #ffc3a0 100%);
     background-attachment: fixed;
+    overflow: hidden;
   }
 
   .card {
+    position: relative;
     width: 100%;
     max-width: 560px;
     background: rgba(255, 255, 255, 0.88);
@@ -33,17 +36,36 @@
     border-radius: 28px;
     padding: 32px 28px 26px;
     box-shadow: 0 24px 60px rgba(60, 50, 120, 0.22);
+    overflow: hidden;
+  }
+
+  .header-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
   h1 {
-    margin: 0 0 6px;
-    font-size: 26px;
+    margin: 0;
+    font-size: 24px;
     letter-spacing: 2px;
     color: #312e81;
   }
 
+  .stats {
+    display: flex;
+    gap: 15px;
+    font-weight: bold;
+    font-size: 16px;
+  }
+  .score-box { color: #d97706; }
+  .timer-box { color: #4f46e5; transition: color 0.3s; }
+  .timer-box.danger { color: var(--danger); animation: pulse 1s infinite; }
+  @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
   .sub {
-    margin: 0 0 22px;
+    margin: 0 0 20px;
     font-size: 14px;
     color: #6b7280;
   }
@@ -67,6 +89,11 @@
     border-color: var(--brand);
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
   }
+  input:disabled {
+    background: #f3f4f6;
+    cursor: not-allowed;
+    border-color: #e5e7eb;
+  }
   input.shake { animation: shake .35s; }
   @keyframes shake {
     0%,100% { transform: translateX(0); }
@@ -88,26 +115,12 @@
     transition: transform .15s, box-shadow .15s;
     white-space: nowrap;
   }
-  button:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(99,102,241,.42); }
-  button:active { transform: translateY(0); }
-
-  .actions { display: flex; gap: 10px; margin-top: 16px; }
-  .actions button { padding: 11px 18px; font-size: 15px; }
-  .actions .secondary {
-    background: #fff;
-    color: #4f46e5;
-    box-shadow: inset 0 0 0 2px #ddd6fe;
-  }
-  .actions .secondary:hover { box-shadow: inset 0 0 0 2px #a5b4fc; }
-  .actions .ghost {
-    background: transparent;
-    color: #6b7280;
-    box-shadow: none;
-  }
-  .actions .ghost:hover { color: #374151; transform: none; }
+  button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(99,102,241,.42); }
+  button:active:not(:disabled) { transform: translateY(0); }
+  button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
 
   .chain {
-    margin-top: 22px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -115,6 +128,8 @@
     max-height: 300px;
     overflow-y: auto;
     scrollbar-width: thin;
+    position: relative;
+    z-index: 1;
   }
   .chain:empty { display: none; }
 
@@ -168,11 +183,107 @@
     min-height: 20px;
     font-size: 14px;
     color: #6b7280;
+    position: relative;
+    z-index: 1;
   }
-  .hint.warn { color: #d97706; }
-  .hint.ok { color: #059669; }
+  .hint.warn { color: var(--danger); font-weight: bold; }
 
-  .hidden { display: none !important; }
+  #star-container {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 99;
+  }
+  .star {
+    font-size: 60px;
+    animation: star-pop 0.8s ease-out forwards;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
+  }
+  @keyframes star-pop {
+    0% { transform: scale(0.5) rotate(-20deg); opacity: 0; }
+    30% { transform: scale(1.5) rotate(10deg); opacity: 1; }
+    100% { transform: scale(2) rotate(0deg); opacity: 0; }
+  }
+
+  /* 遮罩层通用样式 */
+  .overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+  }
+  .overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* 开始界面 */
+  .start-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .overlay h2 {
+    font-size: 28px;
+    color: #312e81;
+    margin: 0 0 10px;
+  }
+  .overlay p {
+    font-size: 16px;
+    margin: 5px 0 20px;
+    color: #4b5563;
+    line-height: 1.5;
+  }
+  .start-btn {
+    font-size: 20px;
+    padding: 16px 48px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    box-shadow: 0 10px 25px rgba(234, 88, 12, 0.4);
+    letter-spacing: 2px;
+  }
+
+  /* 结算界面 */
+  .overlay .danger-title {
+    font-size: 28px;
+    color: var(--danger);
+    margin: 0 0 10px;
+  }
+  .punishment {
+    font-size: 24px;
+    font-weight: bold;
+    color: #ea580c;
+    background: #ffedd5;
+    padding: 10px 20px;
+    border-radius: 12px;
+    margin: 15px 0;
+    border: 2px dashed #f97316;
+  }
+  .final-score {
+    font-size: 36px;
+    font-weight: bold;
+    color: #d97706;
+    margin-bottom: 20px;
+  }
+  .countdown-text {
+    font-size: 14px;
+    color: #6b7280;
+  }
 
   .footer {
     margin-top: 18px;
@@ -181,36 +292,60 @@
     font-size: 12px;
     color: #9ca3af;
     text-align: center;
+    position: relative;
+    z-index: 1;
   }
 
   @media (max-width: 420px) {
     .card { padding: 24px 18px; }
-    h1 { font-size: 22px; }
+    h1 { font-size: 20px; }
     .pill { font-size: 17px; padding: 9px 16px; }
     button { padding: 13px 16px; font-size: 15px; }
+    .start-btn { padding: 14px 30px; font-size: 18px; }
   }
 </style>
 </head>
 <body>
 
-<div class="card">
-  <h1>中文词语接龙</h1>
-  <p class="sub">输入一个中文词语，我来接下一步 👇</p>
+<div class="card" id="gameCard">
+  <div class="header-area">
+    <h1>词语接龙</h1>
+    <div class="stats">
+      <div class="score-box">⭐ 得分: <span id="scoreDisplay">0</span></div>
+      <div class="timer-box" id="timerBox">⏱ 20s</div>
+    </div>
+  </div>
+  
+  <p class="sub" id="subtitle">准备开始...</p>
 
   <div class="row">
-    <input id="wordInput" type="text" placeholder="例如：天气" maxlength="12" autocomplete="off" />
-    <button id="goBtn">接龙</button>
+    <input id="wordInput" type="text" placeholder="输入词语后按回车或点击接龙" maxlength="12" autocomplete="off" disabled />
+    <button id="goBtn" disabled>接龙</button>
   </div>
 
   <div class="chain" id="chain"></div>
   <div class="hint" id="hint"></div>
 
-  <div class="actions">
-    <button class="secondary hidden" id="nextBtn">继续接一步</button>
-    <button class="ghost hidden" id="resetBtn">重新开始</button>
+  <div class="footer">每次接对得 1 分，倒计时会重置为20秒！<br>接错或超时，惩罚做10个蹲起。</div>
+
+  <div id="star-container"></div>
+
+  <!-- 开始界面 -->
+  <div class="overlay show" id="startOverlay">
+    <div class="start-icon">🎮</div>
+    <h2>词语接龙挑战</h2>
+    <p>每次接对电脑的词，倒计时将重置为 <strong>20秒</strong>。<br>尽可能多地接词拿高分吧！</p>
+    <button class="start-btn" id="startBtn">开始游戏</button>
   </div>
 
-  <div class="footer">词库收录 900+ 常用中文词语 · 规则：上一词的最后一个字 = 下一词的第一个字</div>
+  <!-- 结算界面 -->
+  <div class="overlay" id="endOverlay">
+    <h2 class="danger-title" id="overlayTitle">时间到！</h2>
+    <p id="overlayReason">你没能接上哦～</p>
+    <div class="punishment">请做 10 个蹲起 🏋️</div>
+    <p>本局得分：<span class="final-score" id="finalScore">0</span> 分</p>
+    <p class="countdown-text"><span id="restartTimer">3</span> 秒后返回...</p>
+  </div>
 </div>
 
 <script>
@@ -600,16 +735,35 @@ for (const w of RAW.trim().split(/\s+/)) {
   if (!arr.includes(w)) arr.push(w);
 }
 
-/* ---------------- DOM ---------------- */
+/* ---------------- DOM 元素 ---------------- */
 const inputEl = document.getElementById('wordInput');
 const goBtn = document.getElementById('goBtn');
 const chainEl = document.getElementById('chain');
 const hintEl = document.getElementById('hint');
-const nextBtn = document.getElementById('nextBtn');
-const resetBtn = document.getElementById('resetBtn');
+const subtitleEl = document.getElementById('subtitle');
 
-let nodes = [];        // [{word, who}]
-let used = new Set();  // 已出现过的词，避免重复
+const scoreDisplay = document.getElementById('scoreDisplay');
+const timerBox = document.getElementById('timerBox');
+
+const startOverlay = document.getElementById('startOverlay');
+const endOverlay = document.getElementById('endOverlay');
+const startBtn = document.getElementById('startBtn');
+
+const overlayTitle = document.getElementById('overlayTitle');
+const overlayReason = document.getElementById('overlayReason');
+const finalScoreEl = document.getElementById('finalScore');
+const restartTimerEl = document.getElementById('restartTimer');
+const starContainer = document.getElementById('star-container');
+
+/* ---------------- 游戏状态 ---------------- */
+let nodes = [];        
+let used = new Set();  
+let score = 0;         
+let timeLeft = 20;     
+let timerInterval = null;
+let restartInterval = null;
+let isPlaying = false; 
+let currentTargetChar = ''; 
 
 /* ---------------- 工具函数 ---------------- */
 const charsOf = (s) => Array.from(s);
@@ -617,7 +771,6 @@ const lastChar = (s) => { const c = charsOf(s); return c[c.length - 1]; };
 const firstChar = (s) => charsOf(s)[0];
 
 function normalize(s) {
-  // 去掉空白与常见标点
   return (s || '').replace(/[\s，。、,.!！?？:：;；"'“”‘’()（）《》\-—]/g, '');
 }
 
@@ -626,26 +779,21 @@ function hint(text, type) {
   hintEl.className = 'hint' + (type ? ' ' + type : '');
 }
 
-/** 根据上一个词，挑一个能接得上的词 */
 function pickNext(prevWord) {
   const key = lastChar(prevWord);
   const pool = (index.get(key) || []).filter(w => !used.has(w) && w !== prevWord);
   if (!pool.length) return null;
-
-  // 优先挑选“自己还能继续接下去”的词，让接龙更有后劲
+  
   const extendable = pool.filter(w => {
     const c = lastChar(w);
     return (index.get(c) || []).some(x => x !== w);
   });
-
   const list = extendable.length ? extendable : pool;
   return list[Math.floor(Math.random() * list.length)];
 }
 
-/* ---------------- 渲染 ---------------- */
 function renderChain(animateLast = true) {
   chainEl.innerHTML = '';
-
   nodes.forEach((n, i) => {
     if (i > 0) {
       const arrow = document.createElement('div');
@@ -653,7 +801,6 @@ function renderChain(animateLast = true) {
       arrow.textContent = '↓';
       chainEl.appendChild(arrow);
     }
-
     const node = document.createElement('div');
     node.className = 'node ' + n.who;
     if (animateLast && i === nodes.length - 1) node.classList.add('pop');
@@ -669,93 +816,187 @@ function renderChain(animateLast = true) {
     node.append(who, pill);
     chainEl.appendChild(node);
   });
-
   chainEl.scrollTop = chainEl.scrollHeight;
-
-  const hasChain = nodes.length > 0;
-  nextBtn.classList.toggle('hidden', !hasChain);
-  resetBtn.classList.toggle('hidden', !hasChain);
 }
 
-/* ---------------- 主流程 ---------------- */
-function startChain() {
-  const raw = normalize(inputEl.value);
+function showStar() {
+  const star = document.createElement('div');
+  star.className = 'star';
+  star.textContent = '⭐';
+  starContainer.appendChild(star);
+  setTimeout(() => star.remove(), 800);
+}
 
+/* ---------------- 计时器逻辑 ---------------- */
+function startTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 20;
+  updateTimerUI();
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimerUI();
+    if (timeLeft <= 0) {
+      endGame('timeout');
+    }
+  }, 1000);
+}
+
+function updateTimerUI() {
+  timerBox.textContent = `⏱ ${timeLeft}s`;
+  if (timeLeft <= 5) {
+    timerBox.classList.add('danger');
+  } else {
+    timerBox.classList.remove('danger');
+  }
+}
+
+/* ---------------- 游戏流程 ---------------- */
+function startGame() {
+  clearInterval(timerInterval);
+  clearInterval(restartInterval);
+  
+  startOverlay.classList.remove('show');
+  endOverlay.classList.remove('show');
+
+  nodes = [];
+  used = new Set();
+  score = 0;
+  isPlaying = true;
+  scoreDisplay.textContent = '0';
+  hint('');
+  
+  inputEl.disabled = false;
+  goBtn.disabled = false;
+  inputEl.value = '';
+  
+  const initWords = ['天空', '天气', '水果', '大家', '中国', '学习', '生活'];
+  const startWord = initWords[Math.floor(Math.random() * initWords.length)];
+  nodes.push({ word: startWord, who: 'ai' });
+  used.add(startWord);
+  
+  currentTargetChar = lastChar(startWord);
+  subtitleEl.innerHTML = `请接以 <strong style="color:#4f46e5;font-size:18px;">「${currentTargetChar}」</strong> 开头的词`;
+  
+  renderChain(false);
+  startTimer(); // 启动第一轮的20秒
+  inputEl.focus();
+}
+
+function endGame(reason) {
+  if (!isPlaying) return;
+  isPlaying = false;
+  clearInterval(timerInterval);
+  
+  inputEl.disabled = true;
+  goBtn.disabled = true;
+  inputEl.blur();
+  
+  if (reason === 'timeout') {
+    overlayTitle.textContent = '时间到！';
+    overlayReason.textContent = '20秒倒计时结束，你没来得及接完哦～';
+  } else {
+    overlayTitle.textContent = '接错啦！';
+    overlayReason.textContent = reason;
+  }
+  finalScoreEl.textContent = score;
+  
+  endOverlay.classList.add('show');
+  
+  // 3秒倒计时后回到开始界面
+  let countdown = 3;
+  restartTimerEl.textContent = countdown;
+  restartInterval = setInterval(() => {
+    countdown--;
+    restartTimerEl.textContent = countdown;
+    if (countdown <= 0) {
+      clearInterval(restartInterval);
+      endOverlay.classList.remove('show');
+      startOverlay.classList.add('show'); // 退回开始界面
+    }
+  }, 1000);
+}
+
+/* ---------------- 输入处理 ---------------- */
+function handleSubmit() {
+  if (!isPlaying) return;
+  
+  const raw = normalize(inputEl.value);
+  
   if (!raw) {
     inputEl.classList.add('shake');
     setTimeout(() => inputEl.classList.remove('shake'), 400);
-    hint('请先输入一个中文词语吧～', 'warn');
-    inputEl.focus();
     return;
   }
 
   if (charsOf(raw).length < 2) {
+    hint('请输入至少两个字的词语！', 'warn');
     inputEl.classList.add('shake');
     setTimeout(() => inputEl.classList.remove('shake'), 400);
-    hint('请输入至少两个字的词语，比如「天气」～', 'warn');
-    inputEl.focus();
     return;
   }
 
-  nodes = [{ word: raw, who: 'user' }];
-  used = new Set([raw]);
-
-  const next = pickNext(raw);
-
-  if (!next) {
-    renderChain();
-    hint(`词库里暂时找不到以「${lastChar(raw)}」开头的词语，换个词试试吧～`, 'warn');
+  if (firstChar(raw) !== currentTargetChar) {
+    endGame(`要以「${currentTargetChar}」开头，你输入的词不符合规则。`);
     return;
   }
 
-  nodes.push({ word: next, who: 'ai' });
-  used.add(next);
+  if (used.has(raw)) {
+    endGame(`「${raw}」已经出现过啦，不能重复哦。`);
+    return;
+  }
+
+  // 用户接龙成功！
+  score++;
+  scoreDisplay.textContent = score;
+  showStar();
+  
+  nodes.push({ word: raw, who: 'user' });
+  used.add(raw);
   renderChain();
-  hint(`接上啦！「${raw}」→「${next}」，可以点「继续接一步」接着玩。`, 'ok');
-}
-
-function stepFurther() {
-  if (!nodes.length) return;
-
-  const last = nodes[nodes.length - 1].word;
-  const next = pickNext(last);
-
-  if (!next) {
-    hint(`接不下去啦，词库里没有以「${lastChar(last)}」开头的词了 😅`, 'warn');
-    return;
-  }
-
-  nodes.push({ word: next, who: 'ai' });
-  used.add(next);
-  renderChain();
-  hint(`「${last}」→「${next}」`, 'ok');
-}
-
-function reset() {
-  nodes = [];
-  used = new Set();
-  chainEl.innerHTML = '';
-  nextBtn.classList.add('hidden');
-  resetBtn.classList.add('hidden');
-  hint('');
   inputEl.value = '';
-  inputEl.focus();
+  hint('接得漂亮！', 'ok');
+  
+  // 电脑接龙
+  const nextWord = pickNext(raw);
+  if (!nextWord) {
+    hint('电脑词穷了，请继续接！', 'ok');
+    currentTargetChar = lastChar(raw);
+    subtitleEl.innerHTML = `请接以 <strong style="color:#4f46e5;font-size:18px;">「${currentTargetChar}」</strong> 开头的词`;
+    startTimer(); // 电脑词穷，直接重置时间让用户继续接
+  } else {
+    setTimeout(() => {
+      if (!isPlaying) return;
+      
+      nodes.push({ word: nextWord, who: 'ai' });
+      used.add(nextWord);
+      currentTargetChar = lastChar(nextWord);
+      renderChain();
+      subtitleEl.innerHTML = `请接以 <strong style="color:#4f46e5;font-size:18px;">「${currentTargetChar}」</strong> 开头的词`;
+      hint('');
+      
+      startTimer(); // 电脑出词后，重置计时器给用户！
+      inputEl.focus();
+    }, 400); 
+  }
 }
 
 /* ---------------- 事件绑定 ---------------- */
-goBtn.addEventListener('click', startChain);
-nextBtn.addEventListener('click', stepFurther);
-resetBtn.addEventListener('click', reset);
+goBtn.addEventListener('click', handleSubmit);
+startBtn.addEventListener('click', startGame);
 
 inputEl.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') startChain();
+  if (e.key === 'Enter') handleSubmit();
 });
-
 inputEl.addEventListener('input', () => {
   if (hintEl.classList.contains('warn')) hint('');
 });
 
-window.addEventListener('load', () => inputEl.focus());
+// 初始状态：输入框禁用，等待用户点击开始
+window.addEventListener('load', () => {
+  inputEl.disabled = true;
+  goBtn.disabled = true;
+});
 </script>
 </body>
 </html>
