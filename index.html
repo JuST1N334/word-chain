@@ -150,7 +150,7 @@
 <div class="card" id="gameCard">
   <div class="header-area">
     <h1>成语接龙</h1>
-    <div class="timer-box" id="timerBox">⏱ 10s</div>
+    <div class="timer-box" id="timerBox">⏱ 30s</div>
   </div>
 
   <div class="question-area">
@@ -190,7 +190,7 @@ let startsWithMap = new Map(); // 首字 -> 成语数组
 let idiomList = []; // 所有成语的数组
 let currentQuestion = '';
 let timerInterval = null;
-let timeLeft = 10;
+let timeLeft = 30;
 let isAnswering = false;
 let isWaitingNext = false;
 let usedIdioms = new Set();
@@ -220,7 +220,7 @@ function showToast(msg, isError = false) {
 
 function updateTimerUI() {
   timerBox.textContent = `⏱ ${timeLeft}s`;
-  if (timeLeft <= 3) {
+  if (timeLeft <= 5) {  // 最后5秒变红提醒
     timerBox.classList.add('danger');
   } else {
     timerBox.classList.remove('danger');
@@ -265,7 +265,7 @@ async function loadData() {
     });
 
     isDataReady = true;
-    startText.textContent = `词库加载完成（共收录 ${idiomList.length} 个成语）`;
+    startText.innerHTML = `词库加载完成（共收录 ${idiomList.length} 个成语）<br><span style="font-size:14px; color:#0f766e; margin-top:8px; display:inline-block;">每道题限时 30 秒</span>`;
     startBtn.style.display = 'inline-block';
 
   } catch (error) {
@@ -318,7 +318,8 @@ function nextQuestion() {
   isAnswering = true;
   isWaitingNext = false;
 
-  startTimer(10, () => handleFailure('时间到！', true));
+  // 30秒倒计时
+  startTimer(30, () => handleFailure('时间到！', true));
 }
 
 function handleFailure(reason, isTimeout = false) {
@@ -374,7 +375,8 @@ function handleFailure(reason, isTimeout = false) {
           wordInput.focus();
           isAnswering = true;
           isWaitingNext = false;
-          startTimer(10, () => handleFailure('时间到！', true));
+          // 重新开始30秒
+          startTimer(30, () => handleFailure('时间到！', true));
         }
       }
     }
