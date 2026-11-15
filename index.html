@@ -42,79 +42,41 @@
     min-height: 400px;
   }
 
-  /* 顶部状态栏 */
   .header-area {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 24px;
   }
-  h1 {
-    margin: 0;
-    font-size: 22px;
-    color: var(--brand);
-    letter-spacing: 2px;
-  }
+  h1 { margin: 0; font-size: 22px; color: var(--brand); letter-spacing: 2px; }
   .timer-box {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--brand);
-    background: rgba(20, 184, 166, 0.1);
-    padding: 6px 16px;
-    border-radius: 999px;
-    transition: all 0.3s;
+    font-size: 18px; font-weight: bold; color: var(--brand);
+    background: rgba(20, 184, 166, 0.1); padding: 6px 16px;
+    border-radius: 999px; transition: all 0.3s;
   }
   .timer-box.danger {
-    color: var(--danger);
-    background: rgba(225, 29, 72, 0.1);
+    color: var(--danger); background: rgba(225, 29, 72, 0.1);
     animation: pulse 1s infinite;
   }
   @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
 
-  /* 题目展示区 */
   .question-area {
-    text-align: center;
-    margin-bottom: 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    text-align: center; margin-bottom: 20px; flex: 1;
+    display: flex; flex-direction: column; justify-content: center;
   }
   .current-idiom {
-    font-size: 42px;
-    font-weight: bold;
-    color: #1f2937;
-    letter-spacing: 8px;
-    margin: 0 0 10px;
+    font-size: 42px; font-weight: bold; color: #1f2937;
+    letter-spacing: 8px; margin: 0 0 10px;
     text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.8);
     transition: opacity 0.3s;
   }
-  .target-char {
-    font-size: 18px;
-    color: #6b7280;
-    margin: 0;
-  }
-  .target-char span {
-    color: var(--brand-light);
-    font-weight: bold;
-    font-size: 22px;
-  }
+  .target-char { font-size: 18px; color: #6b7280; margin: 0; }
+  .target-char span { color: var(--brand-light); font-weight: bold; font-size: 22px; }
 
-  /* 输入区 */
-  .input-group {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
+  .input-group { display: flex; gap: 10px; margin-bottom: 20px; }
   input {
-    flex: 1;
-    padding: 16px 20px;
-    font-size: 18px;
-    font-family: inherit;
-    border: 2px solid #e5e7eb;
-    border-radius: 16px;
-    outline: none;
-    background: #fff;
+    flex: 1; padding: 16px 20px; font-size: 18px; font-family: inherit;
+    border: 2px solid #e5e7eb; border-radius: 16px; outline: none; background: #fff;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
   input:focus {
@@ -130,94 +92,48 @@
   }
 
   button {
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    font-weight: 600;
-    color: #fff;
-    background: linear-gradient(135deg, var(--brand), var(--brand-light));
-    border-radius: 16px;
-    transition: transform 0.15s, box-shadow 0.15s;
+    border: none; cursor: pointer; font-family: inherit; font-weight: 600;
+    color: #fff; background: linear-gradient(135deg, var(--brand), var(--brand-light));
+    border-radius: 16px; transition: transform 0.15s, box-shadow 0.15s;
     box-shadow: 0 4px 15px rgba(20, 184, 166, 0.3);
   }
   button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20, 184, 166, 0.4); }
   button:active:not(:disabled) { transform: translateY(0); }
   button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
-
   .submit-btn { padding: 0 32px; font-size: 18px; }
 
-  /* 答案展示区 */
   .answer-panel {
-    background: #fefce8;
-    border: 2px dashed #fde047;
-    border-radius: 16px;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
-    display: none;
-    animation: slideUp 0.3s ease-out;
+    background: #fefce8; border: 2px dashed #fde047; border-radius: 16px;
+    padding: 20px; text-align: center; margin-bottom: 20px;
+    display: none; animation: slideUp 0.3s ease-out;
   }
   .answer-panel.show { display: block; }
   .answer-panel.error { background: #fff1f2; border-color: #fda4af; }
   @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-  .answer-title {
-    font-size: 14px;
-    color: #ca8a04;
-    margin-bottom: 8px;
-    font-weight: bold;
-  }
+  .answer-title { font-size: 14px; color: #ca8a04; margin-bottom: 8px; font-weight: bold; }
   .answer-panel.error .answer-title { color: #e11d48; }
-  .ref-idiom {
-    font-size: 28px;
-    font-weight: bold;
-    color: #854d0e;
-    letter-spacing: 4px;
-    margin-bottom: 12px;
-  }
-  .ref-meaning {
-    font-size: 14px;
-    color: #6b7280;
-    line-height: 1.5;
-  }
+  .ref-idiom { font-size: 28px; font-weight: bold; color: #854d0e; letter-spacing: 4px; margin-bottom: 12px; }
+  .ref-meaning { font-size: 14px; color: #6b7280; line-height: 1.5; }
 
-  /* 遮罩层（开始界面） */
   .overlay {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border-radius: 28px;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s;
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px);
+    z-index: 100; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; border-radius: 28px;
+    opacity: 0; visibility: hidden; transition: opacity 0.3s;
   }
   .overlay.show { opacity: 1; visibility: visible; }
   .overlay h2 { font-size: 32px; color: var(--brand); margin-bottom: 10px; letter-spacing: 4px;}
-  .overlay p { color: #6b7280; margin-bottom: 30px; font-size: 16px; }
+  .overlay p { color: #6b7280; margin-bottom: 30px; font-size: 16px; text-align: center; }
   .start-btn { padding: 16px 48px; font-size: 20px; border-radius: 999px; letter-spacing: 2px; }
 
-  /* 提示消息 */
   .toast {
-    position: absolute;
-    top: 20px; left: 50%;
+    position: absolute; top: 20px; left: 50%;
     transform: translateX(-50%) translateY(-20px);
-    background: #10b981;
-    color: white;
-    padding: 10px 24px;
-    border-radius: 999px;
-    font-size: 16px;
-    font-weight: bold;
-    opacity: 0;
-    transition: all 0.3s;
-    pointer-events: none;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
-    z-index: 200;
+    background: #10b981; color: white; padding: 10px 24px;
+    border-radius: 999px; font-size: 16px; font-weight: bold;
+    opacity: 0; transition: all 0.3s; pointer-events: none;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); z-index: 200;
   }
   .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
   .toast.error { background: var(--danger); box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3); }
@@ -237,19 +153,17 @@
     <div class="timer-box" id="timerBox">⏱ 10s</div>
   </div>
 
-  <div class="question-area" id="questionArea">
+  <div class="question-area">
     <h2 class="current-idiom" id="currentIdiom">---</h2>
     <p class="target-char">请接以 <span id="targetChar">-</span> 开头的成语</p>
   </div>
 
-  <!-- 答案展示区 -->
   <div class="answer-panel" id="answerPanel">
     <div class="answer-title" id="answerTitle">参考答案</div>
     <div class="ref-idiom" id="refIdiom">---</div>
     <div class="ref-meaning" id="refMeaning">---</div>
   </div>
 
-  <!-- 输入区 -->
   <div class="input-group">
     <input id="wordInput" type="text" placeholder="输入成语..." autocomplete="off" disabled />
     <button class="submit-btn" id="submitBtn" disabled>确认</button>
@@ -258,340 +172,29 @@
   <!-- 开始界面 -->
   <div class="overlay show" id="startOverlay">
     <h2>成语接龙</h2>
-    <p>10秒内接出下一个成语<br>接不上将自动展示答案</p>
-    <button class="start-btn" id="startBtn">Start</button>
+    <p id="startText">正在加载词库，请稍候...</p>
+    <button class="start-btn" id="startBtn" style="display: none;">Start</button>
   </div>
 
-  <!-- 全局提示 -->
   <div class="toast" id="toast"></div>
 </div>
 
 <script>
-/* ================= 成语词库 (扩充至300+) ================= */
-const idiomData = [
-  { word: '一心一意', meaning: '形容心思、意念专一。' },
-  { word: '意气风发', meaning: '形容精神振奋，气概豪迈。' },
-  { word: '发扬光大', meaning: '使好的作风、传统等得到发展和提高。' },
-  { word: '大显身手', meaning: '充分显示出本领和才能。' },
-  { word: '手到擒来', meaning: '比喻做事有把握，不费力就做好了。' },
-  { word: '来日方长', meaning: '将来的日子还长着呢。表示事有可为。' },
-  { word: '长驱直入', meaning: '长距离不停顿地快速前进。形容进军迅猛。' },
-  { word: '入木三分', meaning: '原形容书法笔力强劲，现多比喻分析问题很深刻。' },
-  { word: '分秒必争', meaning: '一分一秒也一定要争取。形容抓紧时间。' },
-  { word: '争先恐后', meaning: '抢着向前，唯恐落后。' },
-  { word: '后来居上', meaning: '后来的超过先前的。' },
-  { word: '上善若水', meaning: '最高境界的善行就像水的品性一样，泽被万物而不争名利。' },
-  { word: '水到渠成', meaning: '水流到之处便有渠道。比喻条件成熟，事情自然会成功。' },
-  { word: '成千上万', meaning: '形容数量很多。' },
-  { word: '万紫千红', meaning: '形容百花齐放，色彩艳丽。也比喻事物丰富多彩。' },
-  { word: '红颜薄命', meaning: '旧时指女子容貌美丽但遭遇不好。' },
-  { word: '命中注定', meaning: '迷信的人认为人的一切遭遇都是命运预先决定的。' },
-  { word: '定国安邦', meaning: '治理和保卫国家，使国家安定稳固。' },
-  { word: '邦交正常', meaning: '国家与国家之间的外交关系正常。' },
-  { word: '常来常往', meaning: '经常来往。' },
-  { word: '往事如烟', meaning: '过去的事情像烟一样消散。' },
-  { word: '烟消云散', meaning: '像烟云消散一样。比喻事物消失得干干净净。' },
-  { word: '散兵游勇', meaning: '指失去统属的士兵。现也比喻没有组织的单干者。' },
-  { word: '勇往直前', meaning: '勇敢地一直向前进。' },
-  { word: '前所未有', meaning: '历史上从来没有过。' },
-  { word: '有备无患', meaning: '事先有准备，就可以避免祸患。' },
-  { word: '患得患失', meaning: '担心得不到，得到了又担心失掉。形容对个人得失看得很重。' },
-  { word: '失之交臂', meaning: '形容当面错过，失掉好机会。' },
-  { word: '臂力过人', meaning: '力气超过常人。' },
-  { word: '人山人海', meaning: '人群如山似海。形容人聚集得非常多。' },
-  { word: '海阔天空', meaning: '像大海一样辽阔，像天空一样无边无际。' },
-  { word: '空前绝后', meaning: '从前没有过，今后也不会再有。' },
-  { word: '后生可畏', meaning: '年轻人是可敬畏的。形容青年人能超过前辈。' },
-  { word: '畏首畏尾', meaning: '前也怕，后也怕。比喻做事胆子小，顾虑多。' },
-  { word: '尾大不掉', meaning: '尾巴太大，掉转不灵。比喻部下的势力很大，无法指挥调度。' },
-  { word: '掉以轻心', meaning: '对事情采取轻率的漫不经心的态度。' },
-  { word: '心花怒放', meaning: '心里高兴得像花儿盛开一样。形容极其高兴。' },
-  { word: '放虎归山', meaning: '把老虎放回山去。比喻把坏人放回老巢，留下祸根。' },
-  { word: '山穷水尽', meaning: '山和水都到了尽头。比喻无路可走陷入绝境。' },
-  { word: '尽善尽美', meaning: '极其完善，极其美好。指完美到没有一点缺点。' },
-  { word: '美中不足', meaning: '大体很好，但还有不足。' },
-  { word: '足智多谋', meaning: '富有智慧，善于谋划。' },
-  { word: '谋事在人', meaning: '意思是自己已经尽力而为，至于能否达到目的，就要看时运如何了。' },
-  { word: '人定胜天', meaning: '指人力能够战胜自然。' },
-  { word: '天马行空', meaning: '天马奔腾神速。比喻诗文气势豪放。' },
-  { word: '空穴来风', meaning: '有了洞穴才进风。比喻消息和谣言的传播不是完全没有原因的。' },
-  { word: '风起云涌', meaning: '大风刮起，乌云涌现。比喻新事物相继兴起，声势很盛。' },
-  { word: '涌泉相报', meaning: '比喻受恩深重，必定厚报。' },
-  { word: '报效祖国', meaning: '为祖国贡献自己的力量。' },
-  { word: '国泰民安', meaning: '国家太平，人民安乐。' },
-  { word: '安步当车', meaning: '以从容的步行代替乘车。' },
-  { word: '车水马龙', meaning: '车像流水，马像游龙。形容热闹的情景。' },
-  { word: '龙飞凤舞', meaning: '原形容山势的蜿蜒雄壮，后也形容书法笔势有力。' },
-  { word: '舞文弄墨', meaning: '故意玩弄文笔。后常指玩弄文字技巧。' },
-  { word: '墨守成规', meaning: '指思想保守，守着老规矩不肯改变。' },
-  { word: '规行矩步', meaning: '指严格按照规矩办事，毫不苟且。' },
-  { word: '步步为营', meaning: '军队每向前推进一步就设下一首营垒。形容防守严密。' },
-  { word: '营营逐逐', meaning: '形容为了功名利禄而到处奔波。' },
-  { word: '逐鹿中原', meaning: '指群雄并起，争夺天下。' },
-  { word: '原形毕露', meaning: '本来面目完全暴露。指伪装被彻底揭开。' },
-  { word: '露水夫妻', meaning: '指非正式结合的男女。' },
-  { word: '妻离子散', meaning: '一家子被迫分离四散。' },
-  { word: '散马休牛', meaning: '指不兴战事。' },
-  { word: '牛鬼蛇神', meaning: '原形容虚幻怪诞。后比喻社会上形形色色的坏人。' },
-  { word: '神机妙算', meaning: '惊人的机智，巧妙的谋划。形容善于估计复杂的变化情势。' },
-  { word: '算无遗策', meaning: '形容策划精密准确，从来没有失算。' },
-  { word: '策马奔腾', meaning: '骑着马快速奔跑。' },
-  { word: '腾云驾雾', meaning: '原是传说中指会法术的人乘云雾飞行，后形容奔驰迅速。' },
-  { word: '雾里看花', meaning: '原形容年老视力差，看东西模糊，后也比喻看事情不真切。' },
-  { word: '花好月圆', meaning: '花儿正盛开，月亮正圆满。比喻美好圆满。' },
-  { word: '圆木警枕', meaning: '用圆木做枕头，睡着时容易惊醒。形容刻苦自勉。' },
-  { word: '枕戈待旦', meaning: '立志杀敌，枕着武器睡觉等天亮。形容时刻准备作战。' },
-  { word: '旦夕之间', meaning: '形容在很短的时间内。' },
-  { word: '间不容发', meaning: '空隙中容不下一根头发。比喻情势危急到极点。' },
-  { word: '发号施令', meaning: '发出命令，下达指示。' },
-  { word: '令行禁止', meaning: '下令行动就立即行动。形容法令严正，执行认真。' },
-  { word: '止于至善', meaning: '达到极完美的境界。' },
-  { word: '善始善终', meaning: '做事情有好的开头，也有好的结尾。' },
-  { word: '终身大事', meaning: '关系一辈子的大事情，多指婚姻。' },
-  { word: '事在人为', meaning: '指事情要靠人去做的。' },
-  { word: '为富不仁', meaning: '剥削者为了发财致富，心狠手毒，没有一点儿仁慈的心肠。' },
-  { word: '仁至义尽', meaning: '指人的善意和帮助已经做到了最大限度。' },
-  { word: '尽人皆知', meaning: '人人都知道。' },
-  { word: '知难而进', meaning: '迎着困难而上。' },
-  { word: '进退两难', meaning: '前进和后退都难。比喻事情无法决定，因而难以行动。' },
-  { word: '难能可贵', meaning: '指不容易做到的事居然能做到，非常可贵。' },
-  { word: '贵人多忘', meaning: '原指高官态度傲慢，不念旧交，后用于讽刺人健忘。' },
-  { word: '忘恩负义', meaning: '忘记别人对自己的好处，反而做出对不起别人的事。' },
-  { word: '义无反顾', meaning: '从道义上只有勇往直前，不能犹豫回顾。' },
-  { word: '顾名思义', meaning: '从名称想到所包含的意义。' },
-  { word: '义不容辞', meaning: '道义上不允许推辞。' },
-  { word: '辞旧迎新', meaning: '告别旧的一年，迎接新的一年的到来。' },
-  { word: '新陈代谢', meaning: '指生物体不断用新物质代替旧物质的过程。' },
-  { word: '谢天谢地', meaning: '表示目的达到或困难解除后满意轻松的心情。' },
-  { word: '地大物博', meaning: '指国家疆土辽阔，资源丰富。' },
-  { word: '博古通今', meaning: '对古代的事知道得很多，并且通晓现代的事情。形容知识丰富。' },
-  { word: '今非昔比', meaning: '现在不是过去能比得上的。多指形势、自然面貌等发生了巨大的变化。' },
-  { word: '比比皆是', meaning: '到处都是，形容极其常见。' },
-  { word: '是非曲直', meaning: '正确还是不正确，有理还是无理。' },
-  { word: '直截了当', meaning: '形容说话做事爽快、干脆。' },
-  { word: '当机立断', meaning: '在紧要时刻立即做出决断。' },
-  { word: '断章取义', meaning: '指不顾全篇文章或谈话的内容，孤立地取其中的一段或一句的意思。' },
-  { word: '义薄云天', meaning: '正义之气直上高空。形容为正义而斗争的精神极其崇高。' },
-  { word: '天衣无缝', meaning: '比喻事物周密完善，找不出什么毛病。' },
-  { word: '缝衣浅带', meaning: '宽袖大带是古代儒者的服饰，借指儒者。' },
-  { word: '带罪立功', meaning: '带着罪过建立功劳，用以赎罪。' },
-  { word: '功成名就', meaning: '功绩取得了，名声也有了。' },
-  { word: '就事论事', meaning: '按照事情本身的情况来谈论是非得失。' },
-  { word: '事半功倍', meaning: '指做事得法，因而费力小，收效大。' },
-  { word: '倍道兼行', meaning: '一天走两天的路。形容加速急行。' },
-  { word: '行之有效', meaning: '实行起来有成效。' },
-  { word: '风调雨顺', meaning: '风雨适合农时，形容年景好。' },
-  { word: '顺水推舟', meaning: '顺着水流的方向推船。比喻顺着某个趋势或某种方便说话办事。' },
-  { word: '舟车劳顿', meaning: '形容旅途疲劳困顿。' },
-  { word: '顿开茅塞', meaning: '心里领悟，一下子解开了心里的疙瘩。' },
-  { word: '塞翁失马', meaning: '比喻一时虽然受到损失，也许反而因此能得到好处。' },
-  { word: '马到成功', meaning: '形容工作刚开始就取得成功。' },
-  { word: '功败垂成', meaning: '事情在快要成功的时候遭到失败。' },
-  { word: '金玉满堂', meaning: '金玉财宝满堂。形容财富极多。' },
-  { word: '堂堂正正', meaning: '形容光明正大。' },
-  { word: '正大光明', meaning: '心怀坦白，言行正派。' },
-  { word: '明察秋毫', meaning: '目光敏锐，连最细小的事物都能看清楚。' },
-  { word: '毫不介意', meaning: '一点儿也不往心里去。' },
-  { word: '意味深长', meaning: '含蓄深远，耐人寻味。' },
-  { word: '长年累月', meaning: '形容经历很多年月，时间很长。' },
-  { word: '月下老人', meaning: '原指主管婚姻的神仙。后泛指媒人。' },
-  { word: '花言巧语', meaning: '用来骗人的虚伪动听的话。' },
-  { word: '语重心长', meaning: '言辞诚恳，情意深长。' },
-  { word: '长治久安', meaning: '形容国家长期安定、巩固。' },
-  { word: '安居乐业', meaning: '指安定愉快地生活和劳动。' },
-  { word: '业精于勤', meaning: '学业精深在于勤奋。' },
-  { word: '勤能补拙', meaning: '勤奋能够弥补不足。' },
-  { word: '海阔天空', meaning: '形容大自然的广阔。' },
-  { word: '空穴来风', meaning: '比喻消息和传说不是完全没有原因的。' },
-  { word: '风吹雨打', meaning: '原指花木遭受风雨摧残。比喻恶势力对弱小者的迫害。' },
-  { word: '打抱不平', meaning: '遇见不公平的事，挺身而出，帮助受欺负的一方。' },
-  { word: '平易近人', meaning: '态度和蔼，容易接近。' },
-  { word: '水深火热', meaning: '老百姓所受的灾难，像水那样越来越深，像火那样越来越热。' },
-  { word: '热火朝天', meaning: '形容群众性的活动情绪热烈，气氛高涨。' },
-  { word: '天长地久', meaning: '跟天和地存在的时间那样长。形容时间悠久。' },
-  { word: '久别重逢', meaning: '指朋友或亲人在长久分别之后再次见面。' },
-  { word: '逢凶化吉', meaning: '遇到凶险转化为吉祥、顺利。' },
-  { word: '吉祥如意', meaning: '吉利祥和，万事如意。' },
-  { word: '鸟语花香', meaning: '鸟叫得好听，花开得喷香。形容春天的美好景象。' },
-  { word: '香车宝马', meaning: '华丽的车子，珍贵的宝马。指考究的车骑。' },
-  { word: '山明水秀', meaning: '山光明媚，水色秀丽。形容风景优美。' },
-  { word: '秀外慧中', meaning: '外表秀丽，内心聪明。' },
-  { word: '中流砥柱', meaning: '就像屹立在黄河急流中的砥柱山一样。比喻坚强独立的人能在艰难的环境中起支柱作用。' },
-  { word: '柱石之坚', meaning: '像柱石一样坚固。比喻极其坚固。' },
-  { word: '坚不可摧', meaning: '非常坚固，摧毁不了。' },
-  { word: '画蛇添足', meaning: '画蛇时给蛇添上脚。比喻做了多余的事，非但无益，反而不合适。' },
-  { word: '刻舟求剑', meaning: '比喻不懂事物已发展变化而仍静止地看问题。' },
-  { word: '剑拔弩张', meaning: '形容书法笔力遒劲。也比喻对方摆开了阵势，形势紧张。' },
-  { word: '张灯结彩', meaning: '形容节日或有喜庆事情的景象。' },
-  { word: '彩云追月', meaning: '形容夜空中的美丽景色。' },
-  { word: '守株待兔', meaning: '原比喻希图不经过努力而得到成功的侥幸心理。现也比喻死守狭隘经验，不知变通。' },
-  { word: '兔死狐悲', meaning: '兔子死了，狐狸感到悲伤。比喻因同类的死亡而感到悲伤。' },
-  { word: '悲欢离合', meaning: '泛指生活中经历的各种境遇和由此产生的各种心情。' },
-  { word: '合情合理', meaning: '符合情理。' },
-  { word: '理直气壮', meaning: '理由充分，说话气势就壮。' },
-  { word: '壮志凌云', meaning: '形容志向宏伟远大。' },
-  { word: '云开见日', meaning: '拨开云雾，见到太阳。比喻黑暗已经过去，光明已经到来。' },
-  { word: '日新月异', meaning: '每天都在更新，每月都有变化。指发展或进步迅速，不断出现新事物、新气象。' },
-  { word: '异想天开', meaning: '比喻荒诞离奇，想入非非。' },
-  { word: '开门见山', meaning: '比喻说话或写文章直截了当谈本题，不拐弯抹角。' },
-  { word: '亡羊补牢', meaning: '羊逃跑了再去修补羊圈，还不算晚。比喻出了问题以后想办法补救，可以防止继续受损失。' },
-  { word: '牢不可破', meaning: '异常坚固，不可摧毁。' },
-  { word: '破釜沉舟', meaning: '比喻下定决心，不顾一切干到底。' },
-  { word: '拔苗助长', meaning: '比喻违反事物发展的客观规律，急于求成，反而坏事。' },
-  { word: '长此以往', meaning: '长期这样下去。' },
-  { word: '叶公好龙', meaning: '比喻口头上说爱好某事物，实际上并不真爱好。' },
-  { word: '盲人摸象', meaning: '比喻对事物只凭片面的了解或局部的经验，就乱加猜测，想做出全面的判断。' },
-  { word: '象齿焚身', meaning: '象因为有珍贵的牙齿而遭到捕杀。比喻人因为有钱财而招祸。' },
-  { word: '身临其境', meaning: '亲身到了那个境地。' },
-  { word: '境由心生', meaning: '指环境的美好与恶劣是由人的心情决定的。' },
-  { word: '胸有成竹', meaning: '原指画竹子要在心里有一幅竹子的形象。后比喻在做事之前已经拿定主意。' },
-  { word: '竹报平安', meaning: '比喻平安家信。' },
-  { word: '对牛弹琴', meaning: '比喻对不懂道理的人讲道理，对外行人说内行话。' },
-  { word: '琴棋书画', meaning: '弹琴、弈棋、写字、绘画。常以表示个人的文化素养。' },
-  { word: '指鹿为马', meaning: '指着鹿，说是马。比喻故意颠倒黑白，混淆是非。' },
-  { word: '南辕北辙', meaning: '想往南而车子却向北行。比喻行动和目的正好相反。' },
-  { word: '辙乱旗靡', meaning: '车迹错乱，军旗倒下。形容军队溃败。' },
-  { word: '滥竽充数', meaning: '比喻没有真才实学的人混在内行人之中，以次充好。' },
-  { word: '数不胜数', meaning: '数都数不过来。形容数量极多，很难计算。' },
-  { word: '数一数二', meaning: '不算第一也算第二。形容突出。' },
-  { word: '二话不说', meaning: '不说任何别的话。指立即行动。' },
-  { word: '望梅止渴', meaning: '原意是梅子酸，人想吃梅子就会流涎，因而止渴。后比喻愿望无法实现，用空想安慰自己。' },
-  { word: '杯弓蛇影', meaning: '将映在酒杯里的弓影误认为蛇。比喻因疑神疑鬼而引起恐惧。' },
-  { word: '影影绰绰', meaning: '模模糊糊，不真切。' },
-  { word: '狐假虎威', meaning: '狐狸假借老虎的威势。比喻依仗别人的势力欺压人。' },
-  { word: '威风凛凛', meaning: '形容声势或气派使人敬畏。' },
-  { word: '凛然正气', meaning: '令人敬畏的刚正之气。' },
-  { word: '画饼充饥', meaning: '画个饼来解除饥饿。比喻用空想来安慰自己。' },
-  { word: '饥不择食', meaning: '肚子饿了，顾不上挑选食物。比喻迫切需要时，来不及选择。' },
-  { word: '食不甘味', meaning: '吃东西不觉得味道美。形容心里有沉重负担。' },
-  { word: '惊弓之鸟', meaning: '被弓箭吓怕了的鸟不容易安定。比喻经过惊吓的人碰到一点动静就非常害怕。' },
-  { word: '如鱼得水', meaning: '好像鱼得到水一样。比喻有所凭借，也比喻得到跟自己十分投合的人或对自己很合适的环境。' },
-  { word: '水落石出', meaning: '水落下去，水底的石头就露出来。比喻事情的真相完全显露出来。' },
-  { word: '出类拔萃', meaning: '超出同类之上。多指人的品德才能。' },
-  { word: '萃于一堂', meaning: '聚集在一起。' },
-  { word: '一见钟情', meaning: '指男女之间一见面就产生爱情。' },
-  { word: '情投意合', meaning: '形容双方思想感情融洽，合得来。' },
-  { word: '合二为一', meaning: '指将两者合为一个整体。' },
-  { word: '说三道四', meaning: '形容不负责任地胡乱议论。' },
-  { word: '四面八方', meaning: '指各个方面或各个地方。' },
-  { word: '方兴未艾', meaning: '事物正在发展，尚未达到止境。' },
-  { word: '三生有幸', meaning: '三生：佛家指前生、今生、来生；幸：幸运。三世都很幸运。形容极大的幸运。' },
-  { word: '幸灾乐祸', meaning: '人遭到灾祸时反而高兴。' },
-  { word: '祸从口出', meaning: '灾祸从口里产生出来。指说话不谨慎容易惹祸。' },
-  { word: '出人头地', meaning: '指高人一等。形容德才超众或成就突出。' },
-  { word: '地大物博', meaning: '指国家疆土辽阔，资源丰富。' },
-  { word: '四面楚歌', meaning: '比喻陷入四面受敌、孤立无援的境地。' },
-  { word: '歌功颂德', meaning: '颂扬功劳和德行。' },
-  { word: '德高望重', meaning: '品德高尚，声望很高。' },
-  { word: '重于泰山', meaning: '比泰山还要重。形容意义重大。' },
-  { word: '五湖四海', meaning: '指全国各地，有时也指世界各地。' },
-  { word: '海枯石烂', meaning: '海水干涸、石头腐烂。形容历时久远。比喻坚定的意志永远不变。' },
-  { word: '烂醉如泥', meaning: '醉得瘫成一团，扶都扶不住。形容大醉的样子。' },
-  { word: '六神无主', meaning: '形容惊慌着急，没了主意，不知如何才好。' },
-  { word: '主次分明', meaning: '主要和次要的界限清楚。' },
-  { word: '明镜高悬', meaning: '比喻官员判案公正廉明。' },
-  { word: '七零八落', meaning: '形容零散稀疏的样子。特指原来又多又整齐的东西现在零散了。' },
-  { word: '落花流水', meaning: '原形容暮春景色衰败。后常用来比喻被打得大败。' },
-  { word: '水乳交融', meaning: '像水和乳汁融合在一起。比喻感情很融洽或结合十分紧密。' },
-  { word: '融会贯通', meaning: '把各方面的知识和道理融化汇合，得到全面透彻的理解。' },
-  { word: '八仙过海', meaning: '比喻各自拿出本领互相比赛。' },
-  { word: '海市蜃楼', meaning: '比喻虚无缥缈而不实际存在的事物。' },
-  { word: '楼台亭阁', meaning: '泛指多种供游赏、休息的建筑物。' },
-  { word: '九死一生', meaning: '形容经历很大危险而幸存。也形容处在生死关头，情况十分危急。' },
-  { word: '生龙活虎', meaning: '形容活泼矫健，富有生气。' },
-  { word: '虎头蛇尾', meaning: '比喻做事有始无终，起初声势很大，后来劲头很小。' },
-  { word: '十拿九稳', meaning: '比喻很有把握，十分可靠。' },
-  { word: '稳操胜券', meaning: '比喻有绝对把握取得胜利。' },
-  { word: '卷土重来', meaning: '比喻失败之后，重新恢复势力。' },
-  { word: '来者不拒', meaning: '对于有所求而来的人或送上门来的东西概不拒绝。' },
-  { word: '拒之门外', meaning: '把人挡在门外，拒绝对方进入。' },
-  { word: '外强中干', meaning: '外表强大，内里空虚。' },
-  { word: '干将莫邪', meaning: '指宝剑。' },
-  { word: '邪不压正', meaning: '邪恶的压不倒正义的。' },
-  { word: '正大光明', meaning: '心怀坦白，言行正派。' },
-  { word: '明眸皓齿', meaning: '明亮的眼睛，洁白的牙齿。形容女子容貌美丽。' },
-  { word: '齿亡舌存', meaning: '牙齿没有了，舌头还存在。比喻硬的东西容易折断，软的东西反而能保全。' },
-  { word: '存而不论', meaning: '保存起来，不加讨论。' },
-  { word: '论功行赏', meaning: '按功劳的大小给予奖赏。' },
-  { word: '赏心悦目', meaning: '指看到美好的景色而心情愉快。' },
-  { word: '目瞪口呆', meaning: '形容因吃惊或害怕而发愣的样子。' },
-  { word: '呆若木鸡', meaning: '呆得像木头鸡一样。形容因恐惧或惊异而发愣的样子。' },
-  { word: '鸡犬不宁', meaning: '形容骚扰得厉害，连鸡狗都不得安宁。' },
-  { word: '宁死不屈', meaning: '宁愿死也不屈服。' },
-  { word: '屈指可数', meaning: '形容数目很少，扳着手指头就能数过来。' },
-  { word: '数九寒天', meaning: '指冬季最寒冷的时期。' },
-  { word: '天罗地网', meaning: '上下四方都布下了罗网。比喻对敌人、逃犯等设下的严密包围。' },
-  { word: '网开一面', meaning: '把捕禽的网撤去三面，只留一面。比喻采取宽大态度，给人一条出路。' },
-  { word: '面面俱到', meaning: '各方面都能照顾到，没有遗漏疏忽。' },
-  { word: '到此为止', meaning: '以这里为界限。' },
-  { word: '止步不前', meaning: '停住脚步，不向前进。' },
-  { word: '前程似锦', meaning: '前程像锦绣那样。形容前途十分美好。' },
-  { word: '锦上添花', meaning: '在锦上再绣花。比喻好上加好，美上添美。' },
-  { word: '花好月圆', meaning: '比喻美好圆满。多用于祝贺人新婚。' },
-  { word: '圆凿方枘', meaning: '比喻格格不入，不相投合。' },
-  { word: '枘圆凿方', meaning: '比喻格格不入。' },
-  { word: '方寸已乱', meaning: '心已经乱了。' },
-  { word: '乱七八糟', meaning: '形容无秩序，无条理，乱得不成样子。' },
-  { word: '糟糠之妻', meaning: '指共患难的妻子。' },
-  { word: '妻儿老小', meaning: '指全家人。' },
-  { word: '小肚鸡肠', meaning: '比喻器量狭小，只考虑小事，不照顾大局。' },
-  { word: '肠肥脑满', meaning: '形容不劳而食的人吃得饱饱的，养得胖胖的。' },
-  { word: '满腹经纶', meaning: '形容人极有才干和智谋。' },
-  { word: '纶音佛语', meaning: '比喻君王的话。' },
-  { word: '语无伦次', meaning: '话讲得乱七八糟，毫无次序。' },
-  { word: '次第花开', meaning: '花一朵接一朵地开放。' },
-  { word: '开门大吉', meaning: '开门就大吉大利，形容运气好。' },
-  { word: '吉人天相', meaning: '好人总能得到上天的保佑。' },
-  { word: '相得益彰', meaning: '指两个人或两件事物互相配合，双方的能力和作用更能显示出来。' },
-  { word: '彰明较著', meaning: '指极其明显。' },
-  { word: '著书立说', meaning: '写书立传，创立学说。' },
-  { word: '说一不二', meaning: '说怎么样就怎么样。形容说话算数。' },
-  { word: '二话不说', meaning: '不说任何别的话。指立即行动。' },
-  { word: '说长道短', meaning: '议论别人的好坏是非。' },
-  { word: '短兵相接', meaning: '刀枪相见。比喻面对面地进行激烈的斗争。' },
-  { word: '接二连三', meaning: '一个接着一个，接连不断。' },
-  { word: '三心二意', meaning: '又想这样又想那样，犹豫不定。常指不安心，不专一。' },
-  { word: '意在言外', meaning: '语言的真正用意没有明白说出来，细细体会就知道。' },
-  { word: '外柔内刚', meaning: '外表柔和而内心刚正。' },
-  { word: '刚正不阿', meaning: '刚直方正而不逢迎附和。' },
-  { word: '阿谀奉承', meaning: '曲从拍马，迎合别人，竭力向人讨好。' },
-  { word: '承前启后', meaning: '承接前面的，开创后来的。' },
-  { word: '后继有人', meaning: '有接班人。' },
-  { word: '人多势众', meaning: '声势浩大。' },
-  { word: '众志成城', meaning: '万众一心，像坚固的城墙一样不可摧毁。比喻团结一致，力量无比强大。' },
-  { word: '城门失火', meaning: '比喻无端受牵连而遭到祸害。' },
-  { word: '火树银花', meaning: '形容张灯结彩或大放焰火的灿烂夜景。' },
-  { word: '花团锦簇', meaning: '形容五彩缤纷，十分鲜艳多彩的景象。' },
-  { word: '簇锦团花', meaning: '形容五彩缤纷，十分华丽的景象。' },
-  { word: '花枝招展', meaning: '比喻姿态优美。多指妇女打扮得十分艳丽。' },
-  { word: '展翅高飞', meaning: '张开翅膀，高高飞翔。比喻充分发挥才能，施展抱负。' },
-  { word: '飞黄腾达', meaning: '形容骏马奔腾飞驰。比喻骤然得志，官职升得很快。' },
-  { word: '达官贵人', meaning: '指地位高的官吏和显赫的人物。' },
-  { word: '人浮于事', meaning: '指工作中人员过多或人多事少。' },
-  { word: '事与愿违', meaning: '事情的发展与愿望相反。' },
-  { word: '违法乱纪', meaning: '违犯法令，破坏纪律。' },
-  { word: '纪纲人伦', meaning: '指封建社会中人伦纲常。' },
-  { word: '伦理道德', meaning: '指人与人相处的各种道德准则。' },
-  { word: '德才兼备', meaning: '既有好的思想品质，又有工作的才干和能力。' },
-  { word: '备而不用', meaning: '准备好了，以备急用，眼下暂存不用。' },
-  { word: '用心良苦', meaning: '费尽心思，苦心谋划。' },
-  { word: '苦尽甘来', meaning: '艰难的日子过完，美好的日子来到了。' },
-  { word: '来去分明', meaning: '指手续清楚。' },
-  { word: '明察暗访', meaning: '从明里细心察看，从暗里询问了解。' },
-  { word: '访亲问友', meaning: '拜访亲戚朋友。' },
-  { word: '友风子雨', meaning: '指云和雨。' }
-];
+/* ================= 配置 ================= */
+// 使用 chinese-xinhua 项目的 idiom.json，收录 31648 个成语
+const IDIOM_DATA_URL = 'https://cdn.jsdelivr.net/gh/pwxcoo/chinese-xinhua@master/data/idiom.json';
 
-/* ================= 数据索引构建 ================= */
-const idiomMap = new Map(); // 用于快速查词是否存在及释义
-const startsWithMap = new Map(); // 首字 -> 词数组
-
-for (const item of idiomData) {
-  idiomMap.set(item.word, item.meaning);
-  const firstChar = item.word[0];
-  if (!startsWithMap.has(firstChar)) startsWithMap.set(firstChar, []);
-  startsWithMap.get(firstChar).push(item.word);
-}
+/* ================= 状态变量 ================= */
+let idiomMap = new Map(); // 成语 -> 释义
+let startsWithMap = new Map(); // 首字 -> 成语数组
+let idiomList = []; // 所有成语的数组
+let currentQuestion = '';
+let timerInterval = null;
+let timeLeft = 10;
+let isAnswering = false;
+let isWaitingNext = false;
+let usedIdioms = new Set();
+let isDataReady = false;
 
 /* ================= DOM 元素 ================= */
 const currentIdiomEl = document.getElementById('currentIdiom');
@@ -605,17 +208,10 @@ const refIdiomEl = document.getElementById('refIdiom');
 const refMeaningEl = document.getElementById('refMeaning');
 const startOverlay = document.getElementById('startOverlay');
 const startBtn = document.getElementById('startBtn');
+const startText = document.getElementById('startText');
 const toast = document.getElementById('toast');
 
-/* ================= 状态变量 ================= */
-let currentQuestion = ''; 
-let timerInterval = null;
-let timeLeft = 10;
-let isAnswering = false; 
-let isWaitingNext = false; 
-let usedIdioms = new Set(); 
-
-/* ================= 游戏逻辑 ================= */
+/* ================= 工具函数 ================= */
 function showToast(msg, isError = false) {
   toast.textContent = msg;
   toast.className = 'toast show' + (isError ? ' error' : '');
@@ -635,7 +231,6 @@ function startTimer(seconds, onTimeout) {
   clearInterval(timerInterval);
   timeLeft = seconds;
   updateTimerUI();
-  
   timerInterval = setInterval(() => {
     timeLeft--;
     updateTimerUI();
@@ -646,22 +241,74 @@ function startTimer(seconds, onTimeout) {
   }, 1000);
 }
 
+/* ================= 数据加载与索引构建 ================= */
+async function loadData() {
+  try {
+    const response = await fetch(IDIOM_DATA_URL);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const data = await response.json();
+
+    // 构建索引
+    data.forEach(item => {
+      const word = item.word;
+      if (!word || word.length < 4) return; // 确保是四字成语
+
+      // 释义：优先使用 explanation
+      const meaning = item.explanation || '暂无释义';
+      
+      idiomMap.set(word, meaning);
+      idiomList.push(word);
+
+      const firstChar = word[0];
+      if (!startsWithMap.has(firstChar)) startsWithMap.set(firstChar, []);
+      startsWithMap.get(firstChar).push(word);
+    });
+
+    isDataReady = true;
+    startText.textContent = `词库加载完成（共收录 ${idiomList.length} 个成语）`;
+    startBtn.style.display = 'inline-block';
+
+  } catch (error) {
+    console.error('词库加载失败:', error);
+    startText.innerHTML = '词库加载失败，请刷新重试。<br><small style="font-size:12px;color:#999;">(将使用少量内置成语作为后备)</small>';
+    startBtn.style.display = 'inline-block';
+    // 后备数据（非常少，仅用于测试）
+    const fallback = [
+      { word: '一心一意', meaning: '形容心思、意念专一。' },
+      { word: '意气风发', meaning: '形容精神振奋，气概豪迈。' },
+      { word: '发扬光大', meaning: '使好的作风、传统等得到发展和提高。' },
+      { word: '大显身手', meaning: '充分显示出本领和才能。' },
+      { word: '手到擒来', meaning: '比喻做事有把握，不费力就做好了。' },
+      { word: '来日方长', meaning: '将来的日子还长着呢。' },
+    ];
+    fallback.forEach(item => {
+      idiomMap.set(item.word, item.meaning);
+      idiomList.push(item.word);
+      const firstChar = item.word[0];
+      if (!startsWithMap.has(firstChar)) startsWithMap.set(firstChar, []);
+      startsWithMap.get(firstChar).push(item.word);
+    });
+    isDataReady = true;
+  }
+}
+
+/* ================= 游戏逻辑 ================= */
 function nextQuestion() {
-  let available = idiomData.filter(item => !usedIdioms.has(item.word));
-  
+  // 随机抽取一个未使用过的成语作为题目
+  let available = idiomList.filter(w => !usedIdioms.has(w));
   if (available.length === 0) {
     usedIdioms.clear();
-    available = idiomData;
+    available = idiomList;
   }
-
-  const randomItem = available[Math.floor(Math.random() * available.length)];
-  currentQuestion = randomItem.word;
+  
+  const randomWord = available[Math.floor(Math.random() * available.length)];
+  currentQuestion = randomWord;
   usedIdioms.add(currentQuestion);
 
   currentIdiomEl.textContent = currentQuestion;
   targetCharEl.textContent = currentQuestion[currentQuestion.length - 1];
   currentIdiomEl.style.opacity = '1';
-  
+
   answerPanel.classList.remove('show', 'error');
   wordInput.value = '';
   wordInput.disabled = false;
@@ -671,9 +318,7 @@ function nextQuestion() {
   isAnswering = true;
   isWaitingNext = false;
 
-  startTimer(10, () => {
-    handleFailure('时间到！', true);
-  });
+  startTimer(10, () => handleFailure('时间到！', true));
 }
 
 function handleFailure(reason, isTimeout = false) {
@@ -693,7 +338,7 @@ function handleFailure(reason, isTimeout = false) {
   if (nextList && nextList.length > 0) {
     const unusedRef = nextList.filter(w => !usedIdioms.has(w));
     refWord = unusedRef.length > 0 ? unusedRef[Math.floor(Math.random() * unusedRef.length)] : nextList[Math.floor(Math.random() * nextList.length)];
-    refMeaning = idiomMap.get(refWord);
+    refMeaning = idiomMap.get(refWord) || '暂无释义';
     usedIdioms.add(refWord); 
   }
 
@@ -705,10 +350,9 @@ function handleFailure(reason, isTimeout = false) {
   refMeaningEl.textContent = refMeaning;
 
   isWaitingNext = true;
-
   timeLeft = 5;
   updateTimerUI();
-  timerBox.classList.remove('danger'); 
+  timerBox.classList.remove('danger');
   
   let nextCountdown = setInterval(() => {
     timeLeft--;
@@ -773,8 +417,9 @@ function submitAnswer() {
   }, 500);
 }
 
-/* ================= 事件绑定 ================= */
+/* ================= 事件绑定与初始化 ================= */
 startBtn.addEventListener('click', () => {
+  if (!isDataReady) return;
   startOverlay.classList.remove('show');
   usedIdioms.clear();
   nextQuestion();
@@ -789,6 +434,9 @@ wordInput.addEventListener('keydown', (e) => {
 wordInput.addEventListener('input', () => {
   wordInput.classList.remove('shake');
 });
+
+// 页面加载时立即开始加载词库
+window.addEventListener('load', loadData);
 </script>
 </body>
 </html>
